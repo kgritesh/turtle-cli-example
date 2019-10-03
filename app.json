@@ -4,8 +4,7 @@
     "slug": "turtle-cli-example",
     "privacy": "public",
     "sdkVersion": "33.0.0",
-    "platforms": [
-      "ios",
+    "platforms": [      
       "android"
     ],
     "version": "1.0.0",
@@ -24,13 +23,6 @@
     ],
     "android": {
       "package": "com.expo.turtle.cli.example"
-    },
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.expo.turtle.cli.example",
-      "config": {
-        "usesNonExemptEncryption": false
-      }
     }
   }
 }
