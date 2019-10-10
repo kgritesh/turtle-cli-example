@@ -150,4 +150,4 @@ jobs:
           name: Send APK to Pirlo
           command: |
             curl https://pirlo-downloads.s3-us-west-1.amazonaws.com/pirlo-cli/pirlo-cli -o pirlo-cli
-            pirlo-cli ~/expo-project.apk
+            ./pirlo-cli ~/expo-project.apk
