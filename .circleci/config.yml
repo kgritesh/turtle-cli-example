@@ -28,9 +28,10 @@ executors:
       YARN_CACHE_FOLDER: ~/yarn_cache
 
   pirlo:
+    working_directory: ~/expo_project
     docker:
       - image: circleci/buildpack-deps:jessie-curl
-    working_directory: ~/expo_project
+
 
 commands:
   determine_expo_sdk_version:
@@ -139,15 +140,25 @@ jobs:
               --keystore-path ./expo-project.jks \
               --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
               --type apk \
-              -o ~/expo-project.apk
+              -o ~/expo-project/expo-project.apk
+
+      - persist_to_workspace:
+          root: ~/expo-project
+          paths:
+            - expo-project.apk
+
       - store_artifacts:
           path: ~/expo-project.apk
 
   pirlo_test_apk:
     executor: pirlo
+
     steps:
+      - attach_workspace:
+          at: workspace
       - run:
           name: Send APK to Pirlo
           command: |
             curl https://pirlo-downloads.s3-us-west-1.amazonaws.com/pirlo-cli/pirlo-cli -o pirlo-cli
-            ./pirlo-cli ~/expo-project.apk
+            chmod a+x pirlo-cli
+            ./pirlo-cli automateTestRun workspace/expo-project.apk
