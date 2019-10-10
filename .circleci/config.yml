@@ -27,6 +27,10 @@ executors:
       PLATFORM: android
       YARN_CACHE_FOLDER: ~/yarn_cache
 
+  pirlo:
+    docker:
+      - image: circleci/buildpack-deps:jessie-curl
+    working_directory: ~/expo_project
 
 commands:
   determine_expo_sdk_version:
@@ -91,6 +95,9 @@ workflows:
       - build_android_apk:
           requires:
             - publish_app
+      - pirlo_test_apk:
+          requires:
+            - build_android_apk
 
 jobs:
   publish_app:
@@ -135,3 +142,12 @@ jobs:
               -o ~/expo-project.apk
       - store_artifacts:
           path: ~/expo-project.apk
+
+  pirlo_test_apk:
+    executor: pirlo
+    steps:
+      - run:
+          name: Send APK to Pirlo
+          command: |
+            curl https://pirlo-downloads.s3-us-west-1.amazonaws.com/pirlo-cli/pirlo-cli -o pirlo-cli
+            pirlo-cli ~/expo-project.apk
